@@ -23,5 +23,5 @@ payload := jsonResponse{
 		Message: "message",
 	}
 
-_ = WriteJSON(writer, http.StatusOK, payload)
+_ = helpers.WriteJSON(writer, http.StatusOK, payload)
 ```
