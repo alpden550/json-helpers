@@ -14,7 +14,7 @@ go get -u github.com/alpden550/json-helpers
 ```
 import helpers "github.com/alpden550/json-helpers"
 
-if err := helpers.ReadJSONBody(writer, request, data); err != nil {
+if err := helpers.ReadJSONBody(writer, request, &data); err != nil {
     return err
 }
 
