@@ -11,6 +11,8 @@ go get -u github.com/alpden550/json-helpers
 
 ## Working with JSON
 
+Using in a http handler, for example:
+
 ```go
 package main
 
@@ -22,24 +24,25 @@ type JSONPayload struct {
 	Data string `json:"data"`
 }
 
-// read json into requestPayload
-var requestPayload JSONPayload
-if err := helpers.ReadJSONBody(writer, request, &requestPayload); err != nil {
-    return err
-}
-
-payload := jsonResponse{
-		Error:   false,
-		Message: "message",
+func Handler(writer http.ResponseWriter, request *http.Request) {
+	// read json into requestPayload
+	var requestPayload JSONPayload
+	if err := helpers.ReadJSONBody(writer, request, &requestPayload); err != nil {
+		return err
 	}
 	
-// send error json message if error was happened
-user, err := app.Models.User.GetByEmail(requestPayload.Email)
+	// send error json message if error was happened
+	user, err := app.Models.User.GetByEmail(requestPayload.Email)
 	if err != nil {
 		err = helpers.WriteErrorJSON(writer, errors.New("not found user"), http.StatusBadRequest)
 		return
 	}
-	
-// write and send response back as JSON 	
-_ = helpers.WriteJSON(writer, http.StatusOK, payload)
+
+	responsePayload := jsonResponse{
+		Error:   false,
+		Message: "message",
+	}
+	// write and send response back as JSON 	
+	_ = helpers.WriteJSON(writer, http.StatusOK, responsePayload)
+}
 ```
