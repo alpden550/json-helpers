@@ -23,5 +23,11 @@ payload := jsonResponse{
 		Message: "message",
 	}
 
+user, err := app.Models.User.GetByEmail(requestPayload.Email)
+	if err != nil {
+		err = helpers.WriteErrorJSON(writer, errors.New("not found user"), http.StatusBadRequest)
+		return
+	}
+
 _ = helpers.WriteJSON(writer, http.StatusOK, payload)
 ```
