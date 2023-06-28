@@ -9,14 +9,18 @@ import (
 	"strings"
 )
 
-const maxBytes = 1024 * 1024 // 1 megabyte
+// max body size, 1 megabyte
+const maxBytes = 1024 * 1024
 
-type jsonResponse struct {
+// JsonResponse is the type used to send JSON back
+type JsonResponse struct {
 	Error   bool        `json:"error"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
 }
 
+// ReadJSONBody tries to read the body of http request and converts it the JSON object.
+// data parameter is expected to be a pointer to object to read json data into it.
 func ReadJSONBody(writer http.ResponseWriter, request *http.Request, data any) error {
 	if request.Header.Get("Content-Type") != "" {
 		contentType := request.Header.Get("Content-Type")
@@ -72,6 +76,8 @@ func ReadJSONBody(writer http.ResponseWriter, request *http.Request, data any) e
 	return nil
 }
 
+// WriteJSON send back json response with the given status code and headers to the client.
+// The Content-Type header is set to application/json.
 func WriteJSON(writer http.ResponseWriter, status int, data any, headers ...http.Header) error {
 	out, err := json.Marshal(data)
 	if err != nil {
@@ -93,13 +99,15 @@ func WriteJSON(writer http.ResponseWriter, status int, data any, headers ...http
 	return nil
 }
 
+// WriteErrorJSON send back JSON error response with given error and status code, if passed.
+// Default status code is 400.
 func WriteErrorJSON(writer http.ResponseWriter, err error, status ...int) error {
 	statusCode := http.StatusBadRequest
 	if len(status) > 0 {
 		statusCode = status[0]
 	}
 
-	payload := jsonResponse{
+	payload := JsonResponse{
 		Error:   true,
 		Message: err.Error(),
 	}
