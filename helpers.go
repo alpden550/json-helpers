@@ -16,7 +16,7 @@ type JsonResponse struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
-// Tool is the main type of the package with json methods.
+// Tool is the main type of the package with json methods
 type Tool struct {
 	MaxJSONSize          int
 	AllowedUnknownFields bool
