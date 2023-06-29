@@ -1,3 +1,5 @@
+[![Tests](https://github.com/alpden550/json_helpers/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/alpden550/json_helpers/actions/workflows/main.yml)
+
 # Go Json Helpers
 
 Go JSON helpers to read and write JSON  from request to response writer.
