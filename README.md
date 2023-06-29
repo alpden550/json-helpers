@@ -34,7 +34,7 @@ func Handler(writer http.ResponseWriter, request *http.Request) {
 	// send error json message if error was happened
 	user, err := app.Models.User.GetByEmail(requestPayload.Email)
 	if err != nil {
-		err = helpers.WriteErrorJSON(writer, errors.New("not found user"), http.StatusBadRequest)
+		err = helpers.WriteErrorJSON(writer, errors.New("not found user"))
 		return
 	}
 
