@@ -25,16 +25,19 @@ type JSONPayload struct {
 }
 
 func Handler(writer http.ResponseWriter, request *http.Request) {
+	// create tool variable and initialize it
+	tool := helpers.Tool{}
+	
 	// read json into requestPayload
 	var requestPayload JSONPayload
-	if err := helpers.ReadJSONBody(writer, request, &requestPayload); err != nil {
+	if err := tool.ReadJSONBody(writer, request, &requestPayload); err != nil {
 		return err
 	}
 	
 	// send error json message if error was happened
 	user, err := app.Models.User.GetByEmail(requestPayload.Email)
 	if err != nil {
-		err = helpers.WriteErrorJSON(writer, errors.New("not found user"))
+		err = tool.WriteErrorJSON(writer, errors.New("not found user"))
 		return
 	}
 
@@ -43,6 +46,6 @@ func Handler(writer http.ResponseWriter, request *http.Request) {
 		Message: "message",
 	}
 	// write and send response back as JSON 	
-	_ = helpers.WriteJSON(writer, http.StatusOK, responsePayload)
+	_ = tool.WriteJSON(writer, http.StatusOK, responsePayload)
 }
 ```
