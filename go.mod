@@ -1,4 +1,4 @@
-module github.com/alpden550/json-helpers
+module github.com/alpden550/json_helpers
 
 go 1.20
 

@@ -6,7 +6,7 @@ Go JSON helpers to read and write JSON  from request to response writer.
 ## How to install
 
 ```
-go get -u github.com/alpden550/json-helpers
+go get -u github.com/alpden550/json_helpers
 ```
 
 ## Working with JSON
@@ -16,7 +16,7 @@ Using in a http handler, for example:
 ```go
 package main
 
-import helpers "github.com/alpden550/json-helpers"
+import helpers "github.com/alpden550/json_helpers"
 
 // JSONPayload is the type for JSON data that we receive from post request
 type JSONPayload struct {

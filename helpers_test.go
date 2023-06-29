@@ -102,8 +102,8 @@ func TestTool_WriteJSONSuccessfully(t *testing.T) {
 		header         string
 		expectedHeader string
 	}{
-		"valid":              {payload: JsonResponse{Error: false, Message: "bar"}, expected: "bar"},
-		"valid with headers": {payload: JsonResponse{Error: false, Message: "bar"}, header: "FOO", expectedHeader: "BAR", expected: "bar"},
+		"valid":              {payload: JSONResponse{Error: false, Message: "bar"}, expected: "bar"},
+		"valid with headers": {payload: JSONResponse{Error: false, Message: "bar"}, header: "FOO", expectedHeader: "BAR", expected: "bar"},
 	}
 
 	for name, testCase := range tests {

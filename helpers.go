@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-// JsonResponse is the type used to send JSON back
-type JsonResponse struct {
+// JSONResponse is the type used to send JSON back
+type JSONResponse struct {
 	Error   bool        `json:"error"`
 	Message string      `json:"message"`
 	Data    interface{} `json:"data,omitempty"`
@@ -117,7 +117,7 @@ func (tool *Tool) WriteErrorJSON(writer http.ResponseWriter, err error, status .
 		statusCode = status[0]
 	}
 
-	payload := JsonResponse{
+	payload := JSONResponse{
 		Error:   true,
 		Message: err.Error(),
 	}
