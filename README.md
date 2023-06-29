@@ -1,4 +1,4 @@
-# Go Json-Helpers
+# Go Json Helpers
 
 Go JSON helpers to read and write JSON  from request to response writer.
 
