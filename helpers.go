@@ -9,9 +9,6 @@ import (
 	"strings"
 )
 
-// max body size, 1 megabyte
-const maxBytes = 1024 * 1024
-
 // JsonResponse is the type used to send JSON back
 type JsonResponse struct {
 	Error   bool        `json:"error"`
@@ -19,9 +16,15 @@ type JsonResponse struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
+// Tool is the main type of the package with json methods.
+type Tool struct {
+	MaxJSONSize          int
+	AllowedUnknownFields bool
+}
+
 // ReadJSONBody tries to read the body of http request and converts it the JSON object.
 // data parameter is expected to be a pointer to object to read json data into it.
-func ReadJSONBody(writer http.ResponseWriter, request *http.Request, data any) error {
+func (tool *Tool) ReadJSONBody(writer http.ResponseWriter, request *http.Request, data any) error {
 	if request.Header.Get("Content-Type") != "" {
 		contentType := request.Header.Get("Content-Type")
 		if strings.ToLower(contentType) != "application/json" {
@@ -29,10 +32,17 @@ func ReadJSONBody(writer http.ResponseWriter, request *http.Request, data any) e
 		}
 	}
 
-	request.Body = http.MaxBytesReader(writer, request.Body, maxBytes)
+	var maxBytes = 1024 * 1024 // 1 megabyte
+	if tool.MaxJSONSize != 0 {
+		maxBytes = tool.MaxJSONSize
+	}
+	request.Body = http.MaxBytesReader(writer, request.Body, int64(maxBytes))
 
 	dec := json.NewDecoder(request.Body)
-	dec.DisallowUnknownFields()
+
+	if !tool.AllowedUnknownFields {
+		dec.DisallowUnknownFields()
+	}
 
 	err := dec.Decode(&data)
 	if err != nil {
@@ -78,7 +88,7 @@ func ReadJSONBody(writer http.ResponseWriter, request *http.Request, data any) e
 
 // WriteJSON send back json response with the given status code and headers to the client.
 // The Content-Type header is set to application/json.
-func WriteJSON(writer http.ResponseWriter, status int, data any, headers ...http.Header) error {
+func (tool *Tool) WriteJSON(writer http.ResponseWriter, status int, data any, headers ...http.Header) error {
 	out, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -101,7 +111,7 @@ func WriteJSON(writer http.ResponseWriter, status int, data any, headers ...http
 
 // WriteErrorJSON send back JSON error response with given error and status code, if passed.
 // Default status code is 400.
-func WriteErrorJSON(writer http.ResponseWriter, err error, status ...int) error {
+func (tool *Tool) WriteErrorJSON(writer http.ResponseWriter, err error, status ...int) error {
 	statusCode := http.StatusBadRequest
 	if len(status) > 0 {
 		statusCode = status[0]
@@ -112,5 +122,5 @@ func WriteErrorJSON(writer http.ResponseWriter, err error, status ...int) error 
 		Message: err.Error(),
 	}
 
-	return WriteJSON(writer, statusCode, payload)
+	return tool.WriteJSON(writer, statusCode, payload)
 }
