@@ -43,7 +43,7 @@ func Handler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	responsePayload := JSONResponse{
+	responsePayload := helpers.JSONResponse{
 		Error:   false,
 		Message: "message",
 	}
