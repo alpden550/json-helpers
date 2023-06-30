@@ -20,6 +20,11 @@ package main
 
 import helpers "github.com/alpden550/json_helpers"
 
+// JSONPayload is the type for JSON data that we receive from post request
+type JSONPayload struct {
+	Name string `json:"name"`
+	Data string `json:"data"`
+}
 
 func Handler(writer http.ResponseWriter, request *http.Request) {
 	// create tool variable and initialize it
