@@ -22,7 +22,7 @@ import helpers "github.com/alpden550/json_helpers"
 
 // JSONPayload is the type for JSON data that we receive from post request
 type JSONPayload struct {
-	Name string `json:"name"`
+	Email string `json:"email"`
 	Data string `json:"data"`
 }
 
